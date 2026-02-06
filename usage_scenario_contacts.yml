@@ -1,0 +1,87 @@
+---
+name: Nextcloud - Contacts - MariaDB - Firefox
+author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io>
+description: Nexcloud Contacts Scenario
+compose-file: !include compose.yml
+
+services:
+  gcb-playwright:
+    image: greencoding/gcb_playwright:v21
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # for debugging in non-headless mode
+    environment:
+       DISPLAY: ":0" # for debugging in non-headless mode
+       HOST_URL: https://ncs
+    command: [ "tail", "-f", "/dev/null" ]   # keep container running
+
+# this code will never support local filenames
+# as it anyway would require a change in the usage scenario file
+# since that is the case a local dev could also just mount a local folder which is already
+# a supported feature
+relations:
+  server: # will be put in /tmp/relations/server
+    url: https://github.com/nextcloud/server
+    branch: master
+  contacts: # will be put in /tmp/relations/contacts
+    url: https://github.com/nextcloud/contacts
+    branch: main
+
+flow:
+  - name: Patch config
+    container: app
+    hidden: true
+    commands:
+      - type: console
+        shell: bash
+        command: |
+          cat <<'EOF' > config/config.php
+          <?php
+            $CONFIG = array (
+              'overwriteprotocol' => 'https',
+              'overwrite.cli.url' => 'https://ncs',
+              'trusted_proxies' =>
+              array (
+                0 => 'ncs',
+              ),
+              'trusted_domains' =>
+              array (
+                0 => 'ncs',
+              ),
+              'upgrade.disable-web' => true,
+              'instanceid' => 'ocvb0i3uw47a',
+            );
+          EOF
+  - name: Install Nextcloud
+    container: gcb-playwright
+    hidden: true
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/install.py firefox
+
+  - name: Install Apps
+    container: app
+    hidden: true
+    commands:
+      - type: console
+        command: |
+          mkdir /var/www/html/apps/contacts/
+          cp -r /tmp/relations/contacts/* /var/www/html/apps/contacts/
+          chown -R www-data:www-data /var/www/html/apps/contacts/
+          cd /var/www/html/apps/contacts/
+          sudo -u www-data composer install --no-dev
+          sudo -u www-data npm ci
+          sudo -u www-data npm run build
+          sudo -u www-data php /var/www/html/occ app:enable contacts
+        shell: bash
+
+  - name: Contacts
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/contacts.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
