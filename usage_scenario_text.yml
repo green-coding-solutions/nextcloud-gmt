@@ -25,6 +25,9 @@ services:
 # since that is the case a local dev could also just mount a local folder which is already
 # a supported feature
 relations:
+  server: # will be put in /tmp/relations/server
+    url: https://github.com/nextcloud/server
+    branch: master
   text:
     url: https://github.com/nextcloud/text.git
     branch: main

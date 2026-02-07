@@ -21,19 +21,22 @@ services:
     mem_limit: 500MB # this should be enough and leaves room for the App container to have ~4 GB
 
 relations:
+  server: # will be put in /tmp/relations/server
+    url: https://github.com/nextcloud/server
+    branch: master
   text:
     url: https://github.com/nextcloud/text.git
     branch: main
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
-  spreed: # will be put in /tmp/relations/calendar
+  spreed:
     url: https://github.com/nextcloud/spreed
     branch: main
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
-  contacts: # will be put in /tmp/relations/calendar
+  contacts:
     url: https://github.com/nextcloud/contacts
     branch: main
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
-  calendar: # will be put in /tmp/relations/calendar
+  calendar:
     url: https://github.com/nextcloud/calendar
     branch: main
     # commit_hash: ghhkshfkjsdnfk # no commit means latest

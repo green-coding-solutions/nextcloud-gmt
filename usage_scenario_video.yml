@@ -22,7 +22,10 @@ services:
 # since that is the case a local dev could also just mount a local folder which is already
 # a supported feature
 relations:
-  spreed: # will be put in /tmp/relations/calendar
+  server: # will be put in /tmp/relations/server
+    url: https://github.com/nextcloud/server
+    branch: master
+  spreed:
     url: https://github.com/nextcloud/spreed
     branch: main
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
