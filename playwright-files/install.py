@@ -7,7 +7,7 @@ from helpers.helper_functions import log_note, timeout_handler, user_sleep
 
 DOMAIN = os.environ.get('HOST_URL', 'http://app')
 
-def main(browser_name: str = "firefox", headless=True):
+def main(browser_name: str = "firefox", headless=False):
     with sync_playwright() as playwright:
         log_note(f"Launch browser {browser_name}")
         signal.signal(signal.SIGALRM, timeout_handler)
@@ -15,7 +15,7 @@ def main(browser_name: str = "firefox", headless=True):
         if browser_name == "firefox":
             browser = playwright.firefox.launch(headless=headless)
         else:
-            browser = playwright.chromium.launch(headless=False, args=['--disable-gpu', '--disable-software-rasterizer', '--ozone-platform=wayland'])
+            browser = playwright.chromium.launch(headless=headless, args=['--disable-gpu', '--disable-software-rasterizer', '--ozone-platform=wayland'])
         context = browser.new_context(ignore_https_errors=True)
         page = context.new_page()
         signal.alarm(0) # remove timeout signal
