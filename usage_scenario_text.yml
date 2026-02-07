@@ -1,0 +1,137 @@
+---
+name: Nextcloud - Text - MariaDB - Firefox
+author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io>
+description: Nexcloud Text Scenario
+compose-file: !include compose.yml
+
+services:
+  gcb-playwright:
+    image: greencoding/gcb_playwright:v21
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # for debugging in non-headless mode
+    environment:
+       DISPLAY: ":0" # for debugging in non-headless mode
+       HOST_URL: https://ncs
+    command: [ "tail", "-f", "/dev/null" ]   # keep container running
+
+  ncs:
+    mem_limit: 500MB # this should be enough and leaves room for the App container to have ~4 GB
+
+# this code will never support local filenames
+# as it anyway would require a change in the usage scenario file
+# since that is the case a local dev could also just mount a local folder which is already
+# a supported feature
+relations:
+  text:
+    url: https://github.com/nextcloud/text.git
+    branch: main
+    # commit_hash: ghhkshfkjsdnfk # no commit means latest
+  viewer:
+    url: https://github.com/nextcloud/viewer.git
+    branch: master
+
+flow:
+  - name: Patch config
+    container: app
+    hidden: true
+    commands:
+      - type: console
+        shell: bash
+        command: |
+          cat <<'EOF' > config/config.php
+          <?php
+            $CONFIG = array (
+              'overwriteprotocol' => 'https',
+              'overwrite.cli.url' => 'https://ncs',
+              'trusted_proxies' =>
+              array (
+                0 => 'ncs',
+              ),
+              'trusted_domains' =>
+              array (
+                0 => 'ncs',
+              ),
+              'upgrade.disable-web' => true,
+              'instanceid' => 'ocvb0i3uw47a',
+            );
+          EOF
+  - name: Install Nextcloud
+    container: gcb-playwright
+    hidden: true
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/install.py firefox
+
+  - name: Install Apps
+    hidden: true
+    container: app
+    commands:
+      - type: console
+        command: |
+          mkdir /var/www/html/apps/viewer/
+          cp -r /tmp/relations/viewer/* /var/www/html/apps/viewer/
+          chown -R www-data:www-data /var/www/html/apps/viewer/
+          cd /var/www/html/apps/viewer/
+          sudo -u www-data npm ci
+          sudo -u www-data npm run build
+          sudo -u www-data php /var/www/html/occ app:enable viewer
+        shell: bash
+
+      - type: console
+        command: |
+          mkdir /var/www/html/apps/text/
+          cp -r /tmp/relations/text/* /var/www/html/apps/text/
+          chown -R www-data:www-data /var/www/html/apps/text/
+          cd /var/www/html/apps/text/
+          sudo -u www-data composer install --no-dev
+          sudo -u www-data make npm-init build-js-production
+          sudo -u www-data php /var/www/html/occ app:enable text
+        shell: bash
+
+  - name: Create User
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/docs_create_user.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Docs create and share
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/docs_create_doc_and_share.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Collaborative Editing
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/docs_collaboration.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
+        log-stdout: true
+        log-stderr: true
+
+  - name: Delete User
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/docs_delete_user_and_file.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
+        log-stdout: true
+        log-stderr: true
+

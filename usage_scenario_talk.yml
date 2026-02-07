@@ -1,0 +1,88 @@
+---
+name: Nextcloud - Talk - MariaDB - Firefox
+author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io>
+description: Nexcloud Talk Scenario
+compose-file: !include compose.yml
+
+services:
+  gcb-playwright:
+    image: greencoding/gcb_playwright:v21
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # for debugging in non-headless mode
+    environment:
+       DISPLAY: ":0" # for debugging in non-headless mode
+       HOST_URL: https://ncs
+    command: [ "tail", "-f", "/dev/null" ]   # keep container running
+
+# this code will never support local filenames
+# as it anyway would require a change in the usage scenario file
+# since that is the case a local dev could also just mount a local folder which is already
+# a supported feature
+relations:
+  spreed: # will be put in /tmp/relations/calendar
+    url: https://github.com/nextcloud/spreed
+    branch: main
+    # commit_hash: ghhkshfkjsdnfk # no commit means latest
+
+
+flow:
+  - name: Patch config
+    container: app
+    hidden: true
+    commands:
+      - type: console
+        shell: bash
+        command: |
+          cat <<'EOF' > config/config.php
+          <?php
+            $CONFIG = array (
+              'overwriteprotocol' => 'https',
+              'overwrite.cli.url' => 'https://ncs',
+              'trusted_proxies' =>
+              array (
+                0 => 'ncs',
+              ),
+              'trusted_domains' =>
+              array (
+                0 => 'ncs',
+              ),
+              'upgrade.disable-web' => true,
+              'instanceid' => 'ocvb0i3uw47a',
+            );
+          EOF
+  - name: Install Nextcloud
+    container: gcb-playwright
+    hidden: true
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/install.py firefox
+
+  - name: Install Apps
+    container: app
+    hidden: true
+    commands:
+      - type: console
+        command: |
+          mkdir /var/www/html/apps/spreed/
+          cp -r /tmp/relations/spreed/* /var/www/html/apps/spreed/
+          chown -R www-data:www-data /var/www/html/apps/spreed/
+          cd /var/www/html/apps/spreed/
+          sudo -u www-data composer install --no-dev
+          sudo -u www-data npm ci
+          sudo -u www-data make build-js-production
+          sudo -u www-data php /var/www/html/occ app:enable spreed
+        shell: bash
+
+  - name: Talk
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/talk.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
+        log-stdout: true
+        log-stderr: true

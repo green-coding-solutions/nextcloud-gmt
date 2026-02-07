@@ -1,0 +1,62 @@
+---
+name: Nextcloud - Files - MariaDB - Firefox
+author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io>
+description: Nexcloud Files Scenario
+compose-file: !include compose.yml
+
+services:
+  gcb-playwright:
+    image: greencoding/gcb_playwright:v21
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # for debugging in non-headless mode
+    environment:
+       DISPLAY: ":0" # for debugging in non-headless mode
+       HOST_URL: https://ncs
+    command: [ "tail", "-f", "/dev/null" ]   # keep container running
+
+flow:
+  - name: Patch config
+    container: app
+    hidden: true
+    commands:
+      - type: console
+        shell: bash
+        command: |
+          cat <<'EOF' > config/config.php
+          <?php
+            $CONFIG = array (
+              'overwriteprotocol' => 'https',
+              'overwrite.cli.url' => 'https://ncs',
+              'trusted_proxies' =>
+              array (
+                0 => 'ncs',
+              ),
+              'trusted_domains' =>
+              array (
+                0 => 'ncs',
+              ),
+              'upgrade.disable-web' => true,
+              'instanceid' => 'ocvb0i3uw47a',
+            );
+          EOF
+
+  - name: Install Nextcloud
+    container: gcb-playwright
+    hidden: true
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/install.py firefox
+
+  - name: Files
+    container: gcb-playwright
+    commands:
+      - type: console
+        command: python3 /tmp/repo/playwright-files/files.py firefox
+        note: Creating event
+        read-notes-stdout: true
+        read-sci-stdout: true
+        log-stdout: true
+        log-stderr: true
