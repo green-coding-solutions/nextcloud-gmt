@@ -12,7 +12,7 @@ from helpers.helper_functions import log_note, get_random_text, login_nextcloud,
 
 DOMAIN = os.environ.get('HOST_URL', 'http://app')
 
-FILE_PATH = '/tmp/repo/green-metrics-tool/1mb.txt'
+FILE_PATH = '/tmp/repo/1mb.txt'
 
 def download(playwright: Playwright, browser_name: str, download_url:str) -> None:
     log_note(f"Launch download browser {browser_name}")
