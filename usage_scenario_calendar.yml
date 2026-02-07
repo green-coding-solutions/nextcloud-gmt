@@ -57,7 +57,7 @@ flow:
     hidden: true
     commands:
       - type: console
-        command: python3 /tmp/relations/calendar/green-metrics-tool/nextcloud_install.py firefox
+        command: python3 tmp/repo/playwright-files/install.py firefox
 
   - name: Install Apps
     container: app
