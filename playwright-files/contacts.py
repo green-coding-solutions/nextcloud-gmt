@@ -17,7 +17,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         browser = playwright.firefox.launch(headless=False)
     else:
         browser = playwright.chromium.launch(headless=False, args=['--disable-gpu', '--disable-software-rasterizer', '--ozone-platform=wayland'])
-    context = browser.new_context(ignore_https_errors=True)
+    context = browser.new_context(ignore_https_errors=True, viewport={'width': 1280, 'height': 720})
     page = context.new_page()
 
     try:
