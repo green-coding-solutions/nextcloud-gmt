@@ -38,8 +38,8 @@ def collaborate(playwright: Playwright, browser_name: str) -> None:
         user_sleep()
 
         # Wait for the modal to load. As it seems you can't close it while it is showing the opening animation.
-        log_note("Close first-time run popup")
-        #close_modal(docs_user_page)
+        log_note("(Skip) - Close first-time run popup") # modal does not exist anymore in current nextcloud version. We keep log entry for consistency with Blue Angel initial scenarios
+        #close_modal(page)
 
         ## TODO: If we are using Chromium with Wayland the test will flake here. Problem being is that Wayland does not render the hidden window somehow ....
 

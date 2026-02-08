@@ -40,8 +40,8 @@ def create_conversation(playwright: Playwright, browser_name: str) -> str:
         user_sleep()
 
         # Wait for the modal to load. As it seems you can't close it while it is showing the opening animation.
-        log_note("Close first-time run popup")
-        close_modal(page)
+        log_note("(Skip) - Close first-time run popup") # modal does not exist anymore in current nextcloud version. We keep log entry for consistency with Blue Angel initial scenarios
+        #close_modal(page)
 
         log_note("Open Talk app")
         page.locator('#header a[title=Talk]').click()

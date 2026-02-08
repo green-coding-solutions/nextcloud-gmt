@@ -27,8 +27,8 @@ def create_user(playwright: Playwright, browser_name: str, username: str, passwo
         user_sleep()
 
         # Wait for the modal to load. As it seems you can't close it while it is showing the opening animation.
-        log_note("Close first-time run popup")
-        close_modal(page)
+        log_note("(Skip) - Close first-time run popup") # modal does not exist anymore in current nextcloud version. We keep log entry for consistency with Blue Angel initial scenarios
+        #close_modal(page)
 
         log_note("Opening create user menu")
         page.click("button[aria-label='Settings menu']")
