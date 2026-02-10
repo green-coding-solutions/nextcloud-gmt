@@ -39,7 +39,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         log_note("Create new Contact")
         contact_name = "Gary McKinnon" + ''.join(random.choices(string.ascii_letters, k=5))
         page.get_by_role("button", name="New contact").click()
-        page.get_by_placeholder("Name").fill(contact_name)
+        page.locator("#contact-fullname").fill(contact_name)
         page.get_by_role("button", name="Save").click()
         user_sleep()
 
@@ -51,7 +51,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         log_note("Modify contact")
         page.get_by_role("button", name="Edit").click()
         edit_contact_name = contact_name + ''.join(random.choices(string.ascii_letters, k=5))
-        page.get_by_placeholder("Name").fill(edit_contact_name)
+        page.locator("#contact-fullname").fill(edit_contact_name)
         page.get_by_role("button", name="Save").click()
         user_sleep()
 
