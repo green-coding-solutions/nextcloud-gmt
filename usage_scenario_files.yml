@@ -20,7 +20,8 @@ services:
 relations:
   server: # will be put in /tmp/relations/server
     url: https://github.com/nextcloud/server
-    branch: master
+    branch: __GMT_VAR_BRANCH__
+    commit_hash: __GMT_VAR_COMMIT_HASH__
 
 flow:
   - name: Patch config
