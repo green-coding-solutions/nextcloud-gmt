@@ -70,7 +70,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 RUN if [ -d "${KANIKO_RELATION_MOUNT_PATH}" ]; then \
         echo "Copying from ${KANIKO_RELATION_MOUNT_PATH} to /usr/src/nextcloud" && \
         mkdir -p /usr/src/nextcloud && \
-        cp -r "${KANIKO_RELATION_MOUNT_PATH}/*" /usr/src/nextcloud/; \
+        cp -r "${KANIKO_RELATION_MOUNT_PATH}"/* /usr/src/nextcloud/; \
     else \
         echo "Cloning from git repository" && \
         git clone --single-branch --depth=1 --branch master --recurse-submodules "$NEXTCLOUD_REPO" /usr/src/nextcloud; \
