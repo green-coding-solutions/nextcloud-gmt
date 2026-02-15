@@ -2,6 +2,7 @@ FROM php:8.4-apache-trixie
 
 ARG GIT_REF=master
 ARG NEXTCLOUD_REPO=https://github.com/nextcloud/server.git
+ARG KANIKO_RELATION_MOUNT_PATH=/tmp/relations/server
 ARG NODE_VERSION=25.2.1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -64,8 +65,17 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
  && rm composer-setup.php
 
-#COPY nextcloud/ ./
-RUN git clone --single-branch --depth=1 --branch master --recurse-submodules "$NEXTCLOUD_REPO" /usr/src/nextcloud
+# Take /tmp/relations/server if mounted in by kaniko.
+# Otherwise for direct build clone fresh
+RUN if [ -d "${KANIKO_RELATION_MOUNT_PATH}" ]; then \
+        echo "Copying from ${KANIKO_RELATION_MOUNT_PATH} to /usr/src/nextcloud" && \
+        mkdir -p /usr/src/nextcloud && \
+        cp -r "${KANIKO_RELATION_MOUNT_PATH}/*" /usr/src/nextcloud/; \
+    else \
+        echo "Cloning from git repository" && \
+        git clone --single-branch --depth=1 --branch master --recurse-submodules "$NEXTCLOUD_REPO" /usr/src/nextcloud; \
+    fi
+
 # RUN set -eux; \
 #     git init /usr/src/nextcloud; \
 #     cd /usr/src/nextcloud; \
