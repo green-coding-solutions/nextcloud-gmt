@@ -6,7 +6,7 @@ from playwright.sync_api import TimeoutError
 
 
 def login_nextcloud(page, username='nextcloud', password='nextcloud', domain='https://ncs'):
-    page.goto(f"{domain}/login")
+    page.goto(f"{domain}/index.php/login")
     page.locator('#user').fill(username)
     page.locator('#password').fill(password)
     page.locator('#password').press("Enter")

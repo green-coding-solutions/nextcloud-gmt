@@ -91,7 +91,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
 
     try:
         log_note("Opening login page")
-        page.goto(f"{DOMAIN}/login")
+        page.goto(f"{DOMAIN}/index.php/login")
 
         log_note("Logging in")
         login_nextcloud(page, domain=DOMAIN)

@@ -20,7 +20,7 @@ def create_user(playwright: Playwright, browser_name: str, username: str, passwo
         page = context.new_page()
 
         log_note("Opening login page")
-        page.goto(f"{DOMAIN}/login")
+        page.goto(f"{DOMAIN}/index.php/login")
 
         log_note("Logging in")
         login_nextcloud(page, domain=DOMAIN)
