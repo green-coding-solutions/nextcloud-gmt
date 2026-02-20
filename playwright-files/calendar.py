@@ -40,7 +40,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         log_note("Create event")
         event_name = "Event " + ''.join(random.choices(string.ascii_letters, k=5))
         page.get_by_role("button", name="New event").click()
-        page.get_by_placeholder("Event title").fill(event_name)
+        page.get_by_placeholder("Title").fill(event_name)
         page.get_by_role("button", name="Save").click()
         user_sleep()
 
@@ -60,7 +60,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         user_sleep()
 
         log_note('Typing in new detail text')
-        title_input = popover_locator.locator('input[placeholder="Event title"]')
+        title_input = popover_locator.locator('input[placeholder="Title"]')
         expect(title_input).to_be_visible()
         expect(title_input).to_be_enabled()
         new_event_name = event_name + ''.join(random.choices(string.ascii_letters, k=5))
