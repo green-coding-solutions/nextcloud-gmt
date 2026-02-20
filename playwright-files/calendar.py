@@ -84,7 +84,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         actions_button.click()
 
         actions_button_id = actions_button.get_attribute('id')
-        menu_id = actions_button_id.replace('trigger-', '')
+        menu_id = actions_button_id.replace('-trigger', '')
         menu_selector = f'ul#{menu_id}[role="menu"]'
         menu_locator = page.locator(menu_selector)
         expect(menu_locator).to_be_visible()
