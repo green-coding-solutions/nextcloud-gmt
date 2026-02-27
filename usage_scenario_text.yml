@@ -30,11 +30,11 @@ relations:
     branch: __GMT_VAR_BRANCH__
     commit_hash: __GMT_VAR_COMMIT_HASH__
   text:
-    url: https://github.com/nextcloud/text.git
+    url: https://github.com/nextcloud/text
     branch: main
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
   viewer:
-    url: https://github.com/nextcloud/viewer.git
+    url: https://github.com/nextcloud/viewer
     branch: master
 
 flow:
