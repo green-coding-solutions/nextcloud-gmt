@@ -1,4 +1,4 @@
-FROM php:8.4-apache-trixie
+FROM php:8.4.16-apache-trixie
 
 ARG GIT_REF=master
 ARG NEXTCLOUD_REPO=https://github.com/nextcloud/server.git
@@ -10,10 +10,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
     libzip-dev libxml2-dev libicu-dev libgmp-dev \
     libbz2-dev libexif-dev libwebp-dev \
-    libmagickwand-dev util-linux sudo \
+    imagemagick-7-common=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickcore-7.q16-10=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickwand-dev=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickwand-7.q16-10=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickcore-7-headers=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickcore-7.q16-dev=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickwand-7-headers=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickwand-7.q16-dev=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickcore-7-arch-config=8:7.1.1.43+dfsg1-1+deb13u4 \
+    libmagickcore-7.q16-10-extra=8:7.1.1.43+dfsg1-1+deb13u4 \
+    util-linux sudo \
     ca-certificates curl \
     && rm -rf /var/lib/apt/lists/*
-
 
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
@@ -44,9 +53,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     mysqli
 
 
-RUN pecl install redis apcu && docker-php-ext-enable redis apcu
+RUN pecl install redis-6.3.0 apcu-5.1.28 && docker-php-ext-enable redis apcu
 
-RUN pecl install imagick && docker-php-ext-enable imagick || true
+RUN pecl install imagick-3.8.1 && docker-php-ext-enable imagick || true
 
 RUN a2enmod rewrite headers env dir mime setenvif
 
