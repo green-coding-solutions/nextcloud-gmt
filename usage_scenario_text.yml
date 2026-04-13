@@ -104,9 +104,7 @@ flow:
         command: python3 /tmp/repo/playwright-files/docs_create_user.py firefox
         note: Creating event
         read-notes-stdout: true
-        read-sci-stdout: true
-        log-stdout: true
-        log-stderr: true
+
 
   - name: Docs create and share
     container: gcb-playwright
@@ -115,9 +113,7 @@ flow:
         command: python3 /tmp/repo/playwright-files/docs_create_doc_and_share.py firefox
         note: Creating event
         read-notes-stdout: true
-        read-sci-stdout: true
-        log-stdout: true
-        log-stderr: true
+
 
   - name: Collaborative Editing
     container: gcb-playwright
@@ -126,9 +122,7 @@ flow:
         command: python3 /tmp/repo/playwright-files/docs_collaboration.py firefox
         note: Creating event
         read-notes-stdout: true
-        read-sci-stdout: true
-        log-stdout: true
-        log-stderr: true
+
 
   - name: Delete User
     container: gcb-playwright
@@ -137,7 +131,4 @@ flow:
         command: python3 /tmp/repo/playwright-files/docs_delete_user_and_file.py firefox
         note: Creating event
         read-notes-stdout: true
-        read-sci-stdout: true
-        log-stdout: true
-        log-stderr: true
 

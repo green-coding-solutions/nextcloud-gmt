@@ -88,6 +88,3 @@ flow:
         command: python3 /tmp/repo/playwright-files/calendar.py firefox
         note: Creating event
         read-notes-stdout: true
-        read-sci-stdout: true
-        log-stdout: true
-        log-stderr: true

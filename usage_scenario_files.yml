@@ -63,6 +63,3 @@ flow:
         command: python3 /tmp/repo/playwright-files/files.py firefox
         note: Creating event
         read-notes-stdout: true
-        read-sci-stdout: true
-        log-stdout: true
-        log-stderr: true
