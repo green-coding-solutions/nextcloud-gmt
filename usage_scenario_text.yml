@@ -27,17 +27,17 @@ services:
 relations:
   server: # will be put in /tmp/relations/server
     url: https://github.com/nextcloud/server
-    branch: __GMT_VAR_BRANCH__
-    commit_hash: __GMT_VAR_COMMIT_HASH__
+    # branch: __GMT_VAR_BRANCH__
+    # commit_hash: __GMT_VAR_COMMIT_HASH__
   text:
     url: https://github.com/nextcloud/text
     branch: main
-    commit_hash: __GMT_VAR_TEXT_COMMIT_HASH__
+    # commit_hash: __GMT_VAR_TEXT_COMMIT_HASH__
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
   viewer:
     url: https://github.com/nextcloud/viewer
     branch: master
-    commit_hash: __GMT_VAR_VIEWER_COMMIT_HASH__
+    # commit_hash: __GMT_VAR_VIEWER_COMMIT_HASH__
 
 flow:
   - name: Patch config

@@ -44,8 +44,14 @@ def collaborate(playwright: Playwright, browser_name: str) -> None:
         ## TODO: If we are using Chromium with Wayland the test will flake here. Problem being is that Wayland does not render the hidden window somehow ....
 
         log_note("Opening shares menu with all users")
-        admin_user_page.get_by_role("link", name="Files").click()
-        docs_user_page.get_by_role("link", name="Files").click()
+
+        admin_user_page.get_by_role("button", name="Open apps menu", exact=True).click()
+        admin_user_page.get_by_role("menuitem", name="Files", exact=True).click()
+
+        docs_user_page.get_by_role("button", name="Open apps menu", exact=True).click()
+        docs_user_page.get_by_role("menuitem", name="Files", exact=True).click()
+
+        user_sleep()
 
         admin_user_page.get_by_role("link", name="Shares", exact=True).click()
         docs_user_page.get_by_role("link", name="Shares", exact=True).click()
