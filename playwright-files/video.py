@@ -102,7 +102,14 @@ def run(playwright: Playwright, browser_name: str) -> None:
         #close_modal(page)
 
         log_note("Go to Talk app")
-        page.locator('#header a[title=Talk]').click()
+        log_note("Opening apps menu")
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
+        user_sleep()
+
+        log_note("Going to Files")
+        page.get_by_role("menuitem", name="Talk", exact=True).click()
+        user_sleep()
+
         page.wait_for_url("**/apps/spreed/")
         user_sleep()
 

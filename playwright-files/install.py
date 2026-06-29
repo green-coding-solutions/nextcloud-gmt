@@ -42,11 +42,11 @@ def main(browser_name: str = "firefox", headless=False):
             # log_note("Install recommended apps")
             # install_selector = '.button-vue--vue-primary'
             # page.locator(install_selector).click()
-            page.get_by_text("Skip").click()
+            #page.get_by_text("Skip").click()
 
             # 3. Dashboard
-            page.locator('.app-dashboard').wait_for(state='visible', timeout=240_000)
-            log_note("Installation complete")
+            #page.locator('.app-dashboard').wait_for(state='visible', timeout=240_000)
+            #log_note("Installation complete")
             browser.close()
 
         except Exception as e:

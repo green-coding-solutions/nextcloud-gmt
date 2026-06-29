@@ -43,10 +43,15 @@ def create_conversation(playwright: Playwright, browser_name: str) -> str:
         log_note("(Skip) - Close first-time run popup") # modal does not exist anymore in current nextcloud version. We keep log entry for consistency with Blue Angel initial scenarios
         #close_modal(page)
 
-        log_note("Open Talk app")
-        page.locator('#header a[title=Talk]').click()
-        page.wait_for_url("**/apps/spreed/")
+        log_note("Opening apps menu")
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
         user_sleep()
+
+        log_note("Going to Talk")
+        page.get_by_role("menuitem", name="Talk", exact=True).click()
+        user_sleep()
+
+        page.wait_for_url("**/apps/spreed/")
 
         log_note("Create conversation")
         #page.click("span.chat-plus-icon")

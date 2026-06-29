@@ -108,8 +108,12 @@ def run(playwright: Playwright, browser_name: str, headless=False) -> None:
         log_note("(Skip) - Close first-time run popup") # modal does not exist anymore in current nextcloud version. We keep log entry for consistency with Blue Angel initial scenarios
         #close_modal(page)
 
-        log_note("Go to Files")
-        page.get_by_role("link", name="Files").click()
+        log_note("Opening apps menu")
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
+        user_sleep()
+
+        log_note("Going to Files")
+        page.get_by_role("menuitem", name="Files", exact=True).click()
         user_sleep()
 
         log_note("Upload File")
@@ -164,7 +168,13 @@ def run(playwright: Playwright, browser_name: str, headless=False) -> None:
         download(playwright, browser_name, link_url)
 
         log_note('Delete file')
-        page.get_by_role("link", name="Files").click()
+        log_note("Opening apps menu")
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
+        user_sleep()
+
+        log_note("Going to Files")
+        page.get_by_role("menuitem", name="Files", exact=True).click()
+        user_sleep()
         page.locator(f'tr[data-cy-files-list-row-name="{file_name}"] button[aria-label="Actions"]').click()
         page.locator(f'li[data-cy-files-list-row-action="delete"] button').click()
         user_sleep()

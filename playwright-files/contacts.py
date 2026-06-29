@@ -32,8 +32,12 @@ def run(playwright: Playwright, browser_name: str) -> None:
         log_note("(Skip) - Close first-time run popup") # modal does not exist anymore in current nextcloud version. We keep log entry for consistency with Blue Angel initial scenarios
         #close_modal(page)
 
-        log_note("Go to contacs")
-        page.get_by_role("link", name="Contacts").click()
+        log_note("Opening apps menu")
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
+        user_sleep(0)
+
+        log_note("Going to contacts")
+        page.get_by_role("menuitem", name="Contacts", exact=True).click()
         user_sleep()
 
         log_note("Create new Contact")

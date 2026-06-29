@@ -49,7 +49,8 @@ def create_user(playwright: Playwright, browser_name: str, username: str, passwo
         user_sleep()
 
         log_note("Go to Files")
-        page.get_by_role("link", name="Files").click()
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
+        page.get_by_role("menuitem", name="Files", exact=True).click()
         user_sleep()
 
         log_note('Delete file')

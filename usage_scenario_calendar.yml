@@ -70,12 +70,11 @@ flow:
         command: |
           mkdir /var/www/html/apps/calendar/
           cp -r /tmp/relations/calendar/* /var/www/html/apps/calendar/
-          sed -i '/^module\.exports = webpackConfig$/e cat /tmp/repo/memory_patch.txt' /var/www/html/apps/calendar/webpack.config.js
           chown -R www-data:www-data /var/www/html/apps/calendar/
           cd /var/www/html/apps/calendar/
           sudo -u www-data composer install --no-dev
           sudo -u www-data npm ci
-          sudo -u www-data npm run build -- --parallelism 1
+          sudo -u www-data npm run build
           sudo -u www-data php /var/www/html/occ app:enable calendar
         shell: bash
 

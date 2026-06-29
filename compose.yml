@@ -78,8 +78,8 @@ services:
 
   ncs:
     image: nginx:1.27.3-bookworm
-    ports:
-      - "443:443"
+    # ports:
+    #   - "443:443"
     depends_on:
       - app
     volumes:

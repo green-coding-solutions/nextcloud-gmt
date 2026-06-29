@@ -35,9 +35,18 @@ def run(playwright: Playwright, browser_name: str) -> None:
         #close_modal(page)
 
         log_note("Create new text file")
-        page.get_by_role("link", name="Files").click()
+        log_note("Opening apps menu")
+        page.get_by_role("button", name="Open apps menu", exact=True).click()
+        user_sleep()
+
+        log_note("Going to Files")
+        page.get_by_role("menuitem", name="Files", exact=True).click()
+        user_sleep()
+
+
+
         page.get_by_role("button", name="New", exact=True).click()
-        page.click("button[role='menuitem']:has-text('New text file')")
+        page.click("button[role='menuitem']:has-text('Text document')")
 
         rand_str = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
         x = f'Collaborative_doc_{rand_str}'
