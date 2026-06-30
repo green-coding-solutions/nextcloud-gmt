@@ -74,7 +74,7 @@ flow:
           cp -r /tmp/relations/spreed/* /var/www/html/apps/spreed/
           chown -R www-data:www-data /var/www/html/apps/spreed/
           cd /var/www/html/apps/spreed/
-          sudo -u www-data composer install --no-dev
+          sudo -u www-data composer install --no-dev --no-scripts
           sudo -u www-data npm ci
           sudo -u www-data make build-js-production
           sudo -u www-data php /var/www/html/occ app:enable spreed

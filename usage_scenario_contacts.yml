@@ -71,7 +71,7 @@ flow:
           cp -r /tmp/relations/contacts/* /var/www/html/apps/contacts/
           chown -R www-data:www-data /var/www/html/apps/contacts/
           cd /var/www/html/apps/contacts/
-          sudo -u www-data composer install --no-dev
+          sudo -u www-data composer install --no-dev --no-scripts
           sudo -u www-data npm ci
           sudo -u www-data npm run build
           sudo -u www-data php /var/www/html/occ app:enable contacts

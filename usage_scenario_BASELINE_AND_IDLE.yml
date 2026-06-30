@@ -98,7 +98,7 @@ flow:
           cp -r /tmp/relations/text/* /var/www/html/apps/text/
           chown -R www-data:www-data /var/www/html/apps/text/
           cd /var/www/html/apps/text/
-          sudo -u www-data composer install --no-dev
+          sudo -u www-data composer install --no-dev --no-scripts
           sudo -u www-data make npm-init build-js-production
           sudo -u www-data php /var/www/html/occ app:enable text
         shell: bash
@@ -109,7 +109,7 @@ flow:
           cp -r /tmp/relations/spreed/* /var/www/html/apps/spreed
           chown -R www-data:www-data /var/www/html/apps/spreed/
           cd /var/www/html/apps/spreed/
-          sudo -u www-data composer install --no-dev
+          sudo -u www-data composer install --no-dev --no-scripts
           sudo -u www-data npm ci
           sudo -u www-data make build-js-production
           sudo -u www-data php /var/www/html/occ app:enable spreed
@@ -121,7 +121,7 @@ flow:
           cp -r /tmp/relations/contacts/* /var/www/html/apps/contacts
           chown -R www-data:www-data /var/www/html/apps/contacts/
           cd /var/www/html/apps/contacts/
-          sudo -u www-data composer install --no-dev
+          sudo -u www-data composer install --no-dev --no-scripts
           sudo -u www-data npm ci
           sudo -u www-data npm run build
           sudo -u www-data php /var/www/html/occ app:enable contacts
@@ -134,7 +134,7 @@ flow:
           sed -i '/^module\.exports = webpackConfig$/e cat /tmp/repo/memory_patch.txt' /var/www/html/apps/calendar/webpack.config.js
           chown -R www-data:www-data /var/www/html/apps/calendar/
           cd /var/www/html/apps/calendar/
-          sudo -u www-data composer install --no-dev
+          sudo -u www-data composer install --no-dev --no-scripts
           sudo -u www-data npm ci
           sudo -u www-data npm run build -- --parallelism 1
           sudo -u www-data php /var/www/html/occ app:enable calendar
