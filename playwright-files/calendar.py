@@ -99,6 +99,8 @@ def run(playwright: Playwright, browser_name: str) -> None:
         expect(delete_button).to_be_visible()
         delete_button.click()
 
+        log_note('calendar_management=1')
+
         log_note('Validating event was deleted')
         expect(updated_event_title_locator).to_have_count(0)
         user_sleep()

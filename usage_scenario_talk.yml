@@ -4,6 +4,10 @@ author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io
 description: Nexcloud Talk Scenario
 compose-file: !include compose.yml
 
+custom_metrics:
+  talk_message:
+    unit: Talk Message / User
+
 services:
   gcb-playwright:
     image: greencoding/gcb_playwright:v21

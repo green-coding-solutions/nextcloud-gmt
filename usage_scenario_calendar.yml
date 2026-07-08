@@ -4,6 +4,10 @@ author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io
 description: Nexcloud Calendar Scenario
 compose-file: !include compose.yml
 
+custom_metrics:
+  calendar_management:
+    unit: Calendar Management
+
 services:
   gcb-playwright:
     image: greencoding/gcb_playwright:v21

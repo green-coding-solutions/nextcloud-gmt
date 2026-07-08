@@ -4,6 +4,10 @@ author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io
 description: Nexcloud Video Scenario
 compose-file: !include compose.yml
 
+custom_metrics:
+  video_conferencing:
+    unit: Video Conferencing / Participant / Minute
+
 services:
   gcb-playwright:
     image: greencoding/gcb_playwright:v21

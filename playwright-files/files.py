@@ -66,6 +66,8 @@ def download(playwright: Playwright, browser_name: str, download_url:str) -> Non
 
         log_note('Download finished')
 
+        log_note('file_share=1')
+
         page.close()
         log_note("Close download browser")
 

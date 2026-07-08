@@ -79,6 +79,8 @@ def run(playwright: Playwright, browser_name: str) -> None:
         delete_button.click()
         user_sleep()
 
+        log_note('contact_manangement=1')
+
         log_note('Validating delete')
         expect(page.locator('div.list-item-content__name', has_text=edit_contact_name)).to_have_count(0)
         user_sleep()
