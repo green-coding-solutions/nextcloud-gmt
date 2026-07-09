@@ -15,6 +15,7 @@ DOMAIN = os.environ.get('HOST_URL', 'http://app')
 
 TYPING_DELAY_MS = 200
 TALK_INVITEE_COUNT = 5
+MESSAGE_CHARS = 50
 
 def send_message(sender, message):
     log_note("Sending message")
@@ -125,8 +126,10 @@ def talk(playwright: Playwright, url: str, browser_name: str) -> None:
     # Send random text and validate it was received by other users
     log_note("Start sending random messages")
     for i, sender in enumerate(pages):
+        log_note(f"talk_message={MESSAGE_CHARS/TALK_INVITEE_COUNT}") # Per Character Per User
+
         receivers = pages[:i] + pages[i + 1:]
-        random_text = get_random_text(50)
+        random_text = get_random_text(MESSAGE_CHARS)
 
         send_message(sender, random_text)
         user_sleep()

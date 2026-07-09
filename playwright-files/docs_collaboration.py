@@ -11,6 +11,11 @@ from helpers.helper_functions import log_note, get_random_text, login_nextcloud,
 DOMAIN = os.environ.get('HOST_URL', 'http://app')
 
 TYPING_DELAY_MS = 100
+CHARACTER_AMOUNT_PER_CHUNK = 50
+TEXT_CHUNKS = 6
+# Participants cannot just be increased as currently only two browsers are configured
+# Please also update code logic later when using more or less than 2
+PARTICIPANTS = 2
 
 def collaborate(playwright: Playwright, browser_name: str) -> None:
     log_note(f"Launch two {browser_name} browsers")
@@ -108,11 +113,12 @@ def collaborate(playwright: Playwright, browser_name: str) -> None:
         expect(admin_user_page.get_by_text(first_message+ '2')).to_be_visible(timeout=15_000)
 
 
+        for x in range(1, TEXT_CHUNKS+1):
+            log_note(f"document_editing={CHARACTER_AMOUNT_PER_CHUNK/PARTICIPANTS}") # Character per Participant
 
-        for x in range(1, 7):
-            random_message = get_random_text(50)
+            random_message = get_random_text(CHARACTER_AMOUNT_PER_CHUNK)
             # Admin sends on even, docs_dude on odd
-            if x % 2 == 0:
+            if x % PARTICIPANTS == 0:
                 log_note("Admin adding more text")
                 admin_user_page.keyboard.type(random_message, delay=TYPING_DELAY_MS) # We could add delay here, but then we need to increase the timeout
                 expect(docs_user_page.get_by_text(random_message)).to_be_visible(timeout=15_000)

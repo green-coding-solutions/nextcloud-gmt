@@ -4,6 +4,10 @@ author: Arne Tarara <arne@green-coding.io> + Didi Hoffmann <didi@green-coding.io
 description: Nexcloud Files Scenario
 compose-file: !include compose.yml
 
+custom_metrics:
+  file_share:
+    unit: File Share
+
 services:
   gcb-playwright:
     image: greencoding/gcb_playwright:v21
