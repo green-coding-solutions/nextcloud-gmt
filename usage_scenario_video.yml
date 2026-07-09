@@ -6,7 +6,7 @@ compose-file: !include compose.yml
 
 custom_metrics:
   video_conferencing:
-    unit: Video Conferencing / Participant / Minute
+    unit: Second / Participant
 
 services:
   gcb-playwright:

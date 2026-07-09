@@ -142,7 +142,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
         log_note(f"Starting {CHAT_SESSIONS} Chat clients")
         args = [(browser_name, link_url) for _ in range(CHAT_SESSIONS)]
         with Pool(processes=CHAT_SESSIONS) as pool:
-            log_note(f"video_conferencing={CHAT_TIME_SEC/60}") # Per Participant Per Minute
+            log_note(f"video_conferencing={CHAT_TIME_SEC}") # Per Participant Per Second
             pool.starmap(join, args)
 
         log_note('Leaving the call with the host')

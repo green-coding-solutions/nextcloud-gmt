@@ -6,7 +6,7 @@ compose-file: !include compose.yml
 
 custom_metrics:
   talk_message:
-    unit: Talk Message / User
+    unit: Character / Participant
 
 services:
   gcb-playwright:

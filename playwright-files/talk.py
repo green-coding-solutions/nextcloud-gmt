@@ -126,7 +126,7 @@ def talk(playwright: Playwright, url: str, browser_name: str) -> None:
     # Send random text and validate it was received by other users
     log_note("Start sending random messages")
     for i, sender in enumerate(pages):
-        log_note(f"talk_message={1/TALK_INVITEE_COUNT}") # Per Talk Message Per User
+        log_note(f"talk_message={MESSAGE_CHARS/TALK_INVITEE_COUNT}") # Per Character Per User
 
         receivers = pages[:i] + pages[i + 1:]
         random_text = get_random_text(MESSAGE_CHARS)

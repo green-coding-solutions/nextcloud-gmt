@@ -6,7 +6,7 @@ compose-file: !include compose.yml
 
 custom_metrics:
   document_editing:
-    unit: Document Editing / Participant / Character
+    unit: Character per Participant
 
 services:
   gcb-playwright:
