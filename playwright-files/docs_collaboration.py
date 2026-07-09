@@ -13,6 +13,8 @@ DOMAIN = os.environ.get('HOST_URL', 'http://app')
 TYPING_DELAY_MS = 100
 CHARACTER_AMOUNT_PER_CHUNK = 50
 TEXT_CHUNKS = 6
+# Participants cannot just be increased as currently only two browsers are configured
+# Please also update code logic later when using more or less than 2
 PARTICIPANTS = 2
 
 def collaborate(playwright: Playwright, browser_name: str) -> None:
