@@ -114,7 +114,7 @@ def collaborate(playwright: Playwright, browser_name: str) -> None:
 
 
         for x in range(1, TEXT_CHUNKS+1):
-            log_note(f"document_editing={CHARACTER_AMOUNT_PER_CHUNK/PARTICIPANTS}") # Per Participant Per Minute
+            log_note(f"document_editing={CHARACTER_AMOUNT_PER_CHUNK/PARTICIPANTS}") # Per Participant Per Character
 
             random_message = get_random_text(CHARACTER_AMOUNT_PER_CHUNK)
             # Admin sends on even, docs_dude on odd
