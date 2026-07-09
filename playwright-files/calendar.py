@@ -7,7 +7,7 @@ import os
 
 from playwright.sync_api import Playwright, sync_playwright, expect
 
-from helpers.helper_functions import log_note, get_random_text, login_nextcloud, close_modal, timeout_handler, user_sleep
+from helpers.helper_functions import log_note, get_random_text, login_nextcloud, close_modal, close_toasts, timeout_handler, user_sleep
 
 DOMAIN = os.environ.get('HOST_URL', 'http://app')
 
@@ -40,6 +40,10 @@ def run(playwright: Playwright, browser_name: str) -> None:
         page.get_by_role("menuitem", name="Calendar", exact=True).click()
         user_sleep()
 
+        # The calendar warns that the browser timezone is UTC. That toast sits in the top
+        # right corner for 60s and swallows clicks meant for events underneath it.
+        close_toasts(page)
+
         #CREATE
         log_note("Create event")
         event_name = "Event " + ''.join(random.choices(string.ascii_letters, k=5))
@@ -53,6 +57,8 @@ def run(playwright: Playwright, browser_name: str) -> None:
         event_title_locator = page.locator(f'a.fc-event div.fc-event-title', has_text=event_name)
         expect(event_title_locator).to_have_count(1)
         user_sleep()
+
+        close_toasts(page)
 
         # EDIT
         log_note("Modify event - Clicking edit form")
