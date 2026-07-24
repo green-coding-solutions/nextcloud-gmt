@@ -34,7 +34,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
 
         log_note("Opening apps menu")
         page.get_by_role("button", name="Open apps menu", exact=True).click()
-        user_sleep(0)
+        user_sleep()
 
         log_note("Going to calendar")
         page.get_by_role("menuitem", name="Calendar", exact=True).click()
