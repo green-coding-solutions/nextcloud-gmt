@@ -55,7 +55,9 @@ def create_conversation(playwright: Playwright, browser_name: str) -> str:
         page.wait_for_url("**/apps/spreed/")
 
         log_note("Create conversation")
-        #page.click("span.chat-plus-icon")
+        # "Create a new conversation" now lives in the chat-plus actions menu of the sidebar.
+        # The menu content is only mounted once it is open, so the toggle must be clicked first.
+        page.locator('button.action-item__menutoggle:has(.chat-plus-outline-icon)').click()
         page.get_by_text("Create a new conversation").click()
         # Different placeholder names and capitalization on apache vs FPM
         page.get_by_placeholder("name").fill("Random talk")

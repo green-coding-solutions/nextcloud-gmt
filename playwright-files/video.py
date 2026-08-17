@@ -114,7 +114,9 @@ def run(playwright: Playwright, browser_name: str) -> None:
         user_sleep()
 
         log_note("Start new chat session")
-        #page.locator('button.action-item__menutoggle:has(.chat-plus-icon)').click()
+        # "Create a new conversation" now lives in the chat-plus actions menu of the sidebar.
+        # The menu content is only mounted once it is open, so the toggle must be clicked first.
+        page.locator('button.action-item__menutoggle:has(.chat-plus-outline-icon)').click()
         page.get_by_text("Create a new conversation").click()
         chat_name = "Chat " + ''.join(random.choices(string.ascii_letters, k=5))
         page.get_by_placeholder('Enter a name for this conversation').fill(chat_name)
