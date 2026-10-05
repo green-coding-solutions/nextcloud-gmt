@@ -153,8 +153,11 @@ def run(playwright: Playwright, browser_name: str, headless=False) -> None:
         updated_file_locator.locator('button[data-cy-files-list-row-action="sharing-status"]').click()
         page.locator('button.new-share-link').click()
 
-        toast_selector = 'div.toastify.toast-success:has-text("Link copied")'
-        page.wait_for_selector(toast_selector)
+        # @nextcloud/dialogs 7.5 dropped Toastify. Toasts are now role="status" elements with hashed
+        # class names, so we match on role and text and keep the old selector for older servers.
+        link_copied_toast = page.get_by_role("status").filter(has_text="Link copied").or_(
+            page.locator('div.toastify.toast-success:has-text("Link copied")'))
+        link_copied_toast.first.wait_for()
         user_sleep()
 
         # Does not work with Firefox since clipboard access is blocked for security reasons
