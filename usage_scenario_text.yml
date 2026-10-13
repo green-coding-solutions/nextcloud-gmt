@@ -20,9 +20,16 @@ services:
        DISPLAY: ":0" # for debugging in non-headless mode
        HOST_URL: https://ncs
     command: [ "tail", "-f", "/dev/null" ]   # keep container running
+    # Text runs its build with --max-old-space-size=4096, which got OOM killed in an app container
+    # with ~4 GB. Past runs peaked at ~1.5 GB here and ~120 MB in db, so we cap both and
+    # leave the rest (~8 GB) to the auto assigned app container.
+    mem_limit: 3GB
 
   ncs:
-    mem_limit: 500MB # this should be enough and leaves room for the App container to have ~4 GB
+    mem_limit: 500MB # this should be enough and leaves room for the App container
+
+  db:
+    mem_limit: 1GB
 
 # this code will never support local filenames
 # as it anyway would require a change in the usage scenario file
@@ -81,6 +88,12 @@ flow:
     commands:
       - type: console
         command: |
+          # Since Nextcloud 36 the viewer is part of server and apps/viewer only holds its legacy API.
+          # The viewer relation is only installed for older servers.
+          if [ -d /var/www/html/apps/viewer/ ]; then
+            echo "Server already ships apps/viewer. Not installing the viewer app."
+            exit 0
+          fi
           mkdir /var/www/html/apps/viewer/
           cp -r /tmp/relations/viewer/* /var/www/html/apps/viewer/
           chown -R www-data:www-data /var/www/html/apps/viewer/

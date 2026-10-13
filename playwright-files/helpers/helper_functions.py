@@ -28,16 +28,18 @@ def close_modal(page) -> None:
 
 
 def close_toasts(page, timeout=5_000) -> None:
-    # Toasts stack in the top right corner and intercept pointer events for anything
-    # underneath them. Some, like the calendar timezone warning, linger for 60s, which
-    # outlasts the default 30s click timeout, so they must be clicked away.
+    # Toasts intercept pointer events for anything underneath them. Some, like the calendar
+    # timezone warning, linger for 60s, which outlasts the default 30s click timeout, so they
+    # must be clicked away.
+    # Toastify toasts come from @nextcloud/dialogs < 7.5. Newer versions render role="status"
+    # or role="alert" elements with hashed class names and a close button labelled "Close".
     with contextlib.suppress(TimeoutError, AssertionError):
-        toasts = page.locator('.toastify.on')
+        toasts = page.locator('.toastify.on, :is([role="status"], [role="alert"]):has(> button[aria-label="Close"])')
         while (count := toasts.count()) > 0:
             # Collapse to one line: read-notes-stdout expects a single note per line
             text = ' '.join(toasts.first.inner_text().replace('✖', '').split())
             log_note(f"Closing toast: {text}")
-            toasts.first.locator('.toast-close').click(timeout=timeout)
+            toasts.first.locator('.toast-close, button[aria-label="Close"]').first.click(timeout=timeout)
             expect(toasts).to_have_count(count - 1, timeout=timeout)
 
 
