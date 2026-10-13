@@ -20,6 +20,17 @@ services:
        DISPLAY: ":0" # for debugging in non-headless mode
        HOST_URL: https://ncs
     command: [ "tail", "-f", "/dev/null" ]   # keep container running
+    # All scenarios use the same memory split so their runs stay comparable. GMT hands the memory
+    # left after these limits to the app container, which is ~8 GB on machine 12. Text builds with
+    # --max-old-space-size=4096 and got OOM killed when app only had ~4 GB. Runs up to October 2026
+    # peaked at 2.2 GB in this container (Talk) and at 120 MB in db.
+    mem_limit: 3GB
+
+  ncs:
+    mem_limit: 500MB # this should be enough and leaves room for the App container
+
+  db:
+    mem_limit: 1GB
 
 relations:
   server: # will be put in /tmp/relations/server
