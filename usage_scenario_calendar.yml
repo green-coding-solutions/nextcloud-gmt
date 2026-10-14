@@ -20,6 +20,13 @@ services:
        DISPLAY: ":0" # for debugging in non-headless mode
        HOST_URL: https://ncs
     command: [ "tail", "-f", "/dev/null" ]   # keep container running
+    mem_limit: 3GB
+
+  ncs:
+    mem_limit: 500MB
+
+  db:
+    mem_limit: 1GB
 
 # this code will never support local filenames
 # as it anyway would require a change in the usage scenario file
