@@ -42,10 +42,6 @@ relations:
     branch: main
     commit_hash: __GMT_VAR_TEXT_COMMIT_HASH__
     # commit_hash: ghhkshfkjsdnfk # no commit means latest
-  viewer:
-    url: https://github.com/nextcloud/viewer
-    branch: master
-    commit_hash: __GMT_VAR_VIEWER_COMMIT_HASH__
 
 flow:
   - name: Patch config
@@ -83,23 +79,6 @@ flow:
     hidden: true
     container: app
     commands:
-      - type: console
-        command: |
-          # Since Nextcloud 36 the viewer is part of server and apps/viewer only holds its legacy API.
-          # The viewer relation is only installed for older servers.
-          if [ -d /var/www/html/apps/viewer/ ]; then
-            echo "Server already ships apps/viewer. Not installing the viewer app."
-            exit 0
-          fi
-          mkdir /var/www/html/apps/viewer/
-          cp -r /tmp/relations/viewer/* /var/www/html/apps/viewer/
-          chown -R www-data:www-data /var/www/html/apps/viewer/
-          cd /var/www/html/apps/viewer/
-          sudo -u www-data npm ci
-          sudo -u www-data npm run build
-          sudo -u www-data php /var/www/html/occ app:enable viewer
-        shell: bash
-
       - type: console
         command: |
           mkdir /var/www/html/apps/text/
