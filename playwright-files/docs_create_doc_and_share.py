@@ -75,7 +75,7 @@ def run(playwright: Playwright, browser_name: str) -> None:
 
         log_note('Sharing with docs_dude user')
         page.get_by_placeholder("Type names or teams").fill("docs")
-        page.get_by_text("docs_dude").first.click()
+        page.get_by_role("option", name=re.compile(r"docs_dude|undefined")).first.click()
         page.get_by_text("Save Share").first.click()
         user_sleep()
 
